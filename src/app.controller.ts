@@ -1,17 +1,17 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post, Req } from '@nestjs/common';
 import { AppService } from './app.service';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly appService: AppService,
+  ) {}
 
   @Get('/rate')
   async getRate(@Req() request: Request): Promise<{ exchange_rate: number }> {
-    console.log(
-      '--- api key we got from frontend:',
-      request.headers[process.env.API_KEY_HEADER],
-    );
-
     if (
       request.headers[process.env.API_KEY_HEADER] !==
       process.env.THIS_API_ACCEPTED_KEY
@@ -19,14 +19,18 @@ export class AppController {
       throw new Error('Api token recieved from the frontend is incorrect');
     }
 
-    console.log(
-      'returning this data:',
-      await this.appService.getConversionRate(),
-    );
+    const cachedExchangeRate: undefined | number =
+      await this.cacheManager.get('exchange_rate');
 
-    const conversionRate = await this.appService.getConversionRate();
+    if (cachedExchangeRate) {
+      return {
+        exchange_rate: cachedExchangeRate,
+      };
+    }
 
-    console.log('returning rate to frontend');
+    const conversionRate: number = await this.appService.getConversionRate();
+
+    this.cacheManager.set('exchange_rate', conversionRate, 60000);
 
     return {
       exchange_rate: conversionRate,
@@ -36,9 +40,6 @@ export class AppController {
   @Post('/transaction')
   async makeTransaction(@Body() body: { amountToExchange: number }) {
     const currentRate: number = await this.appService.getConversionRate();
-
-    console.log('--- request ---', body);
-    console.log('--- amount to exchange ---', body['amountToExchange']);
 
     const amountToExchange = body.amountToExchange;
 
@@ -53,11 +54,4 @@ export class AppController {
   checkTransaction() {
     return { response: 'transaction GET works' };
   }
-
-  // @Get('/rateWithToken')
-  // async getRate(@Req() request: Request): Promise<string> {
-  //   console.log({ request });
-
-  //   return await this.appService.getConversionRate();
-  // }
 }
