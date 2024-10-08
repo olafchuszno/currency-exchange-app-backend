@@ -37,14 +37,17 @@ export class AppController {
   async makeTransaction(@Req() request: Request) {
     const currentRate: number = await this.appService.getConversionRate();
 
-    const amountToExchange = request.body['amountToExchange'];
-    const currency = request.body['currency'];
+    console.log('--- request ---', request.body);
+    console.log('--- amount to exchange ---', request.body['amountToExchange']);
 
-    if (!amountToExchange || !currency) {
+    const amountToExchange = request.body['amountToExchange'];
+    // const currency = request.body['currency'];
+
+    if (!amountToExchange) {
       throw new Error('Bad request');
     }
 
-    return amountToExchange * currentRate;
+    return { transaction_amount: amountToExchange * currentRate };
   }
 
   @Get('/transaction')
