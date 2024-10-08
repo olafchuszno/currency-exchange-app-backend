@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
@@ -34,14 +34,13 @@ export class AppController {
   }
 
   @Post('/transaction')
-  async makeTransaction(@Req() request: Request) {
+  async makeTransaction(@Body() body: { amountToExchange: number }) {
     const currentRate: number = await this.appService.getConversionRate();
 
-    console.log('--- request ---', request.body);
-    console.log('--- amount to exchange ---', request.body['amountToExchange']);
+    console.log('--- request ---', body);
+    console.log('--- amount to exchange ---', body['amountToExchange']);
 
-    const amountToExchange = request.body['amountToExchange'];
-    // const currency = request.body['currency'];
+    const amountToExchange = body.amountToExchange;
 
     if (!amountToExchange) {
       throw new Error('Bad request');
