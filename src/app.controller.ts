@@ -4,7 +4,9 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 
 interface Transaction {
-  transaction_amount: number;
+  transaction_eur_amount: number;
+  transaction_pln_amount: number;
+  currenty_exchange_rate: number;
   timestamp: string;
 }
 
@@ -58,7 +60,9 @@ export class AppController {
       Math.round(amountToExchange * currentRate * 100) / 100;
 
     return {
-      transaction_amount: transactionAmount,
+      transaction_eur_amount: amountToExchange,
+      transaction_pln_amount: transactionAmount,
+      currenty_exchange_rate: currentRate,
       timestamp: getTime(),
     };
   }
