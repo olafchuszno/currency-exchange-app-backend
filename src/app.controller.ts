@@ -3,6 +3,11 @@ import { AppService } from './app.service';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 
+interface Transaction {
+  transaction_amount: number;
+  timestamp: string;
+}
+
 @Controller()
 export class AppController {
   constructor(
@@ -38,7 +43,9 @@ export class AppController {
   }
 
   @Post('/transaction')
-  async makeTransaction(@Body() body: { amountToExchange: number }) {
+  async makeTransaction(
+    @Body() body: { amountToExchange: number },
+  ): Promise<Transaction> {
     const currentRate: number = await this.appService.getConversionRate();
 
     const amountToExchange = body.amountToExchange;
@@ -47,11 +54,28 @@ export class AppController {
       throw new Error('Bad request');
     }
 
-    return { transaction_amount: amountToExchange * currentRate };
+    const transactionAmount =
+      Math.round(amountToExchange * currentRate * 100) / 100;
+
+    return {
+      transaction_amount: transactionAmount,
+      timestamp: getTime(),
+    };
   }
 
   @Get('/transaction')
   checkTransaction() {
     return { response: 'transaction GET works' };
   }
+}
+
+function getTime() {
+  return new Date().toLocaleString('pl-PL', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
 }
