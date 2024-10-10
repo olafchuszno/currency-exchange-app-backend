@@ -12,10 +12,6 @@ export class TransactionsService {
     private transactionModel: typeof TransactionModel,
   ) {}
 
-  create(amountInEur: number, currencyRate: number) {
-    return amountInEur * currencyRate;
-  }
-
   async getConversionRate() {
     const conversionApiUrl = process.env.EXCHANGE_RATE_API_URL || '';
     const conversionApiKey = process.env.EXCHANGE_RATE_API_KEY || '';
@@ -46,12 +42,8 @@ export class TransactionsService {
     return this.transactionModel.create(transaction);
   }
 
-  findAll() {
-    return `This action returns all transactions`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} transaction`;
+  async getAllTransactions() {
+    return this.transactionModel.findAll();
   }
 
   getTime() {
@@ -63,9 +55,5 @@ export class TransactionsService {
       minute: '2-digit',
       second: '2-digit',
     });
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} transaction`;
   }
 }
