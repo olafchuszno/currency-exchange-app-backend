@@ -5,7 +5,6 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-
 @Table({ tableName: 'transactions' })
 export class TransactionModel extends Model<TransactionModel> {
   @PrimaryKey
@@ -31,7 +30,12 @@ export class TransactionModel extends Model<TransactionModel> {
   @Column({
     allowNull: false,
     type: 'timestamp',
-    defaultValue: () => new Date(),
   })
-  timestamp: Date;
+  createdAt: Date;
+
+  @Column({
+    allowNull: false,
+    type: 'timestamp',
+  })
+  updatedAt: Date;
 }
