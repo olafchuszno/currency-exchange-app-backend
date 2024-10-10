@@ -1,3 +1,38 @@
+import { Module } from '@nestjs/common';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { User } from './user.model';
+import { UsersController } from './.controller';
+import { UsersService } from './.service';
+
+@Module({
+  imports: [SequelizeModule.forFeature([User])],
+  providers: [UsersService],
+  controllers: [UsersController],
+})
+export class UsersModule {}
+
+
+import { Column, Model, Table } from 'sequelize-typescript';
+
+@Table
+export class User extends Model {
+  @Column
+  id: number;
+
+  @Column
+  transaction_eur_amount: number;
+
+  @Column
+  transaction_pln_amount: number;
+
+  @Column
+  currenty_exchange_rate: number;
+
+  @Column
+  timestamp: string;
+}
+
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
