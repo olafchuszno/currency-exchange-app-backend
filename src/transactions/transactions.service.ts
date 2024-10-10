@@ -1,11 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { UpdateTransactionDto } from './dto/update-transaction.dto';
+// import { CreateTransactionDto } from './dto/create-transaction.dto';
+// import { UpdateTransactionDto } from './dto/update-transaction.dto';
+// import { InjectModel } from '@nestjs/sequelize';
+// import { TransactionModel } from './transactions.model';
+// import { Sequelize } from 'sequelize';
 
 @Injectable()
 export class TransactionsService {
-  create(createTransactionDto: CreateTransactionDto) {
-    return 'This action adds a new transaction';
+  // constructor(
+  //   @InjectModel(TransactionModel)
+  //   private transactionModel: typeof TransactionModel,
+  //   private sequalize: Sequelize,
+  // ) {}
+
+  create(amountInEur: number, currencyRate: number) {
+    return amountInEur * currencyRate;
   }
 
   findAll() {
@@ -16,8 +25,15 @@ export class TransactionsService {
     return `This action returns a #${id} transaction`;
   }
 
-  update(id: number, updateTransactionDto: UpdateTransactionDto) {
-    return `This action updates a #${id} transaction`;
+  getTime() {
+    return new Date().toLocaleString('pl-PL', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
   }
 
   remove(id: number) {

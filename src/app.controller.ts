@@ -1,14 +1,7 @@
-import { Body, Controller, Get, Inject, Post, Req } from '@nestjs/common';
+import { Controller, Get, Inject, Req } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-
-interface Transaction {
-  transaction_eur_amount: number;
-  transaction_pln_amount: number;
-  currenty_exchange_rate: number;
-  timestamp: string;
-}
 
 @Controller()
 export class AppController {
@@ -44,42 +37,26 @@ export class AppController {
     };
   }
 
-  @Post('/transaction')
-  async makeTransaction(
-    @Body() body: { amountToExchange: number },
-  ): Promise<Transaction> {
-    const currentRate: number = await this.appService.getConversionRate();
+  // @Post('/transaction')
+  // async makeTransaction(
+  //   @Body() body: { amountToExchange: number },
+  // ): Promise<Transaction> {
+  //   const currentRate: number = await this.appService.getConversionRate();
 
-    const amountToExchange = body.amountToExchange;
+  //   const amountToExchange = body.amountToExchange;
 
-    if (!amountToExchange) {
-      throw new Error('Bad request');
-    }
+  //   if (!amountToExchange) {
+  //     throw new Error('Bad request');
+  //   }
 
-    const transactionAmount =
-      Math.round(amountToExchange * currentRate * 100) / 100;
+  //   const transactionAmount =
+  //     Math.round(amountToExchange * currentRate * 100) / 100;
 
-    return {
-      transaction_eur_amount: amountToExchange,
-      transaction_pln_amount: transactionAmount,
-      currenty_exchange_rate: currentRate,
-      timestamp: getTime(),
-    };
-  }
-
-  @Get('/transaction')
-  checkTransaction() {
-    return { response: 'transaction GET works' };
-  }
-}
-
-function getTime() {
-  return new Date().toLocaleString('pl-PL', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  });
+  //   return {
+  //     transaction_eur_amount: amountToExchange,
+  //     transaction_pln_amount: transactionAmount,
+  //     currenty_exchange_rate: currentRate,
+  //     timestamp: getTime(),
+  //   };
+  // }
 }
