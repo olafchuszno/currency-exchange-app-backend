@@ -1,26 +1,15 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { AppService } from 'src/app.service';
-// import { UpdateTransactionDto } from './dto/update-transaction.dto';
 
-// interface Transaction {
-//   transaction_eur_amount: number;
-//   transaction_pln_amount: number;
-//   currenty_exchange_rate: number;
-//   timestamp: string;
-// }
-
-@Controller('transactions')
+@Controller('transaction')
 export class TransactionsController {
-  constructor(
-    private readonly transactionsService: TransactionsService,
-    private readonly appService: AppService,
-  ) {}
+  constructor(private readonly transactionsService: TransactionsService) {}
 
-  @Post('/transaction')
+  @Post()
   async create(@Body() body: CreateTransactionDto) {
-    const currentRate: number = await this.appService.getConversionRate();
+    const currentRate: number =
+      await this.transactionsService.getConversionRate();
 
     const amountToExchange = body.transaction_eur_amount;
 

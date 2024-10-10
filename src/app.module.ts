@@ -15,7 +15,7 @@ import { TransactionModel } from './transactions/transactions.model';
     }),
     CacheModule.register(),
     SequelizeModule.forRoot({
-      dialect: 'postgres', // Specify your database dialect here (e.g., 'postgres', 'mysql', etc.)
+      dialect: 'postgres',
       host: 'localhost',
       port: 5432,
       database: 'currency',
@@ -28,7 +28,7 @@ import { TransactionModel } from './transactions/transactions.model';
     TransactionsModule,
   ],
   controllers: [AppController],
-  providers: [AppService], // Remove TransactionsService
+  providers: [AppService],
 })
 export class AppModule {
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}

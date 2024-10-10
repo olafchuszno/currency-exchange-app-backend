@@ -10,11 +10,27 @@ export class TransactionsService {
   constructor(
     @InjectModel(TransactionModel)
     private transactionModel: typeof TransactionModel,
-    // private sequalize: Sequelize,
   ) {}
 
   create(amountInEur: number, currencyRate: number) {
     return amountInEur * currencyRate;
+  }
+
+  async getConversionRate() {
+    const conversionApiUrl = process.env.EXCHANGE_RATE_API_URL || '';
+    const conversionApiKey = process.env.EXCHANGE_RATE_API_KEY || '';
+    const apiKeyHeader = process.env.API_KEY_HEADER || '';
+
+    return fetch(conversionApiUrl, {
+      headers: {
+        [apiKeyHeader]: conversionApiKey,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => data.exchange_rate as number)
+      .catch(() => {
+        throw new Error('Server error occurred getting conversion rate.');
+      });
   }
 
   storeTransaction(transaction_eur_amount, currenty_exchange_rate) {
