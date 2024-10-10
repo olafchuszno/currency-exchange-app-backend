@@ -6,13 +6,11 @@ import {
   Table,
 } from 'sequelize-typescript';
 
-@Table
+@Table({ tableName: 'transactions' })
 export class TransactionModel extends Model<TransactionModel> {
   @PrimaryKey
   @AutoIncrement
-  @Column({
-    primaryKey: true,
-  })
+  @Column
   id: number;
 
   @Column({

@@ -1,3 +1,3 @@
 export class CreateTransactionDto {
-  amountToExchange: number;
+  transaction_eur_amount: number;
 }
