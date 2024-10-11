@@ -36,27 +36,4 @@ export class AppController {
       exchange_rate: conversionRate,
     };
   }
-
-  // @Post('/transaction')
-  // async makeTransaction(
-  //   @Body() body: { amountToExchange: number },
-  // ): Promise<Transaction> {
-  //   const currentRate: number = await this.appService.getConversionRate();
-
-  //   const amountToExchange = body.amountToExchange;
-
-  //   if (!amountToExchange) {
-  //     throw new Error('Bad request');
-  //   }
-
-  //   const transactionAmount =
-  //     Math.round(amountToExchange * currentRate * 100) / 100;
-
-  //   return {
-  //     transaction_eur_amount: amountToExchange,
-  //     transaction_pln_amount: transactionAmount,
-  //     currenty_exchange_rate: currentRate,
-  //     timestamp: getTime(),
-  //   };
-  // }
 }
