@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
+import { TransactionModel } from './transactions.model';
 
 @Controller('transaction')
 export class TransactionsController {
@@ -24,7 +25,7 @@ export class TransactionsController {
   }
 
   @Get()
-  findAll() {
+  findAll(): Promise<TransactionModel[]> {
     return this.transactionsService.getAllTransactions();
   }
 }
