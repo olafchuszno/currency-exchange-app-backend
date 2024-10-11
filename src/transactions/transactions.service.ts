@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
-// import { CreateTransactionDto } from './dto/create-transaction.dto';
-// import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { TransactionModel } from './transactions.model';
-// import { Sequelize } from 'sequelize';
 
 @Injectable()
 export class TransactionsService {
@@ -29,9 +26,12 @@ export class TransactionsService {
       });
   }
 
-  storeTransaction(transaction_eur_amount, currenty_exchange_rate) {
+  storeTransaction(
+    transaction_eur_amount: number,
+    currenty_exchange_rate: number,
+  ) {
     const transaction_pln_amount =
-      Math.round(transaction_eur_amount * 100) / 100;
+      Math.round(transaction_eur_amount * currenty_exchange_rate * 100) / 100;
 
     const transaction: Partial<TransactionModel> = {
       transaction_eur_amount: transaction_eur_amount,

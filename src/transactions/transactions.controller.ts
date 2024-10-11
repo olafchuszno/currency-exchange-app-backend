@@ -11,14 +11,14 @@ export class TransactionsController {
     const currentRate: number =
       await this.transactionsService.getConversionRate();
 
-    const amountToExchange = body.transaction_eur_amount;
+    const transactionEurAmount = body.transaction_eur_amount;
 
-    if (!amountToExchange) {
+    if (!transactionEurAmount) {
       throw new Error('Bad request');
     }
 
     return this.transactionsService.storeTransaction(
-      amountToExchange,
+      transactionEurAmount,
       currentRate,
     );
   }
