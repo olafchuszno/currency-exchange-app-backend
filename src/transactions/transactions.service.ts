@@ -42,7 +42,7 @@ export class TransactionsService {
     return this.transactionModel.create(transaction);
   }
 
-  async getAllTransactions() {
+  async getAllTransactions(): Promise<TransactionModel[]> {
     return this.transactionModel.findAll();
   }
 
