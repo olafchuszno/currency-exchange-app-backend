@@ -1,5 +1,5 @@
 # Currency Exchange App
 
-## 
+## Running locally
 
-$ npm run start:dev# currency-exchange-app-backend
+$ npm run start
