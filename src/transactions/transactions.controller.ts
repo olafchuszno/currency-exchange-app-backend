@@ -18,6 +18,10 @@ export class TransactionsController {
       throw new Error('Bad request');
     }
 
+    if (typeof transactionEurAmount !== 'number') {
+      throw new Error('Bad request. Eur amount has to be a number');
+    }
+
     return this.transactionsService.storeTransaction(
       transactionEurAmount,
       currentRate,
