@@ -3,7 +3,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Cache } from 'cache-manager';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CACHE_MANAGER, CacheModule } from '@nestjs/cache-manager';
 import { TransactionsModule } from './transactions/transactions.module';
 import { TransactionModel } from './transactions/transactions.model';
@@ -14,16 +14,20 @@ import { TransactionModel } from './transactions/transactions.model';
       isGlobal: true,
     }),
     CacheModule.register(),
-    SequelizeModule.forRoot({
-      dialect: 'postgres',
-      host: 'host.docker.internal',
-      port: 5432,
-      database: 'currency',
-      username: 'postgres',
-      password: 'test1234',
-      autoLoadModels: true,
-      synchronize: true,
-      models: [TransactionModel],
+    SequelizeModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        dialect: 'postgres',
+        host: configService.get<string>('DB_HOST'),
+        port: parseInt(configService.get<string>('DB_PORT'), 10),
+        database: configService.get<string>('DB_NAME'),
+        username: configService.get<string>('DB_USER'),
+        password: configService.get<string>('DB_PASSWORD'),
+        autoLoadModels: true,
+        synchronize: true,
+        models: [TransactionModel],
+      }),
     }),
     TransactionsModule,
   ],
