@@ -14,16 +14,19 @@ export class TransactionModel extends Model<TransactionModel> {
 
   @Column({
     allowNull: false,
+    type: 'FLOAT',
   })
   transaction_eur_amount: number;
 
   @Column({
     allowNull: false,
+    type: 'FLOAT',
   })
   transaction_pln_amount: number;
 
   @Column({
     allowNull: false,
+    type: 'FLOAT',
   })
   currenty_exchange_rate: number;
 
